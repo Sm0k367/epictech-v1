@@ -1,19 +1,21 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
 const { Groq } = require('groq-sdk');
 
-const app = express();
+module.exports = async (req, res) => {
+    // Enable CORS
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    
+    // Handle preflight
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    
+    // Only allow POST
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
 
-// 1. REGULATED COMMUNICATION INTERFACE
-app.use(cors());
-app.use(express.json());
-
-// Serve static files
-app.use(express.static(path.join(__dirname, '..')));
-
-// 2. THE AGENTIC GATEWAY ENDPOINT
-app.post('/api/webmcp', async (req, res) => {
     const { command } = req.body;
     
     // KEYMASTER OPS: Validating the Credential Vault
@@ -43,13 +45,14 @@ app.post('/api/webmcp', async (req, res) => {
             temperature: 0.7,
         });
 
-        res.json({ result: completion.choices.message.content });
+        // FIX: Correct response structure
+        res.json({ result: completion.choices[0].message.content });
         
     } catch (error) {
         console.error("MANIFESTATION ANOMALY:", error);
-        res.status(500).json({ error: "Execution failed. Ensure your API keys are valid in the Vercel Dashboard." });
+        res.status(500).json({ 
+            error: "Execution failed. Ensure your API keys are valid in the Vercel Dashboard.",
+            details: error.message 
+        });
     }
-});
-
-// 3. AXIOMATIC EXPORT (The Serverless Bridge)
-module.exports = app;
+};
