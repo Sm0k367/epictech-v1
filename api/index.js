@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { Groq } = require('groq-sdk');
 
 const app = express();
@@ -7,6 +8,9 @@ const app = express();
 // 1. REGULATED COMMUNICATION INTERFACE
 app.use(cors());
 app.use(express.json());
+
+// Serve static files
+app.use(express.static(path.join(__dirname, '..')));
 
 // 2. THE AGENTIC GATEWAY ENDPOINT
 app.post('/api/webmcp', async (req, res) => {
