@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "epic-tech-bridge": {
+      "command": "node",
+      "args": ["./src/api/webmcp/server.js"],
+      "env": {
+        "GROQ_API_KEY": "REPLACE_WITH_YOUR_KEY",
+        "GEMINI_API_KEY": "REPLACE_WITH_YOUR_KEY",
+        "AGENT_MODE": "SOVEREIGN"
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": true,
+        "prompts": true
+      }
+    }
+  },
+  "ui": {
+    "theme": "mythic-tech-fusion",
+    "primaryColor": "#00f2ff",
+    "secondaryColor": "#ffb300"
+  },
+  "settings": {
+    "auto_manifest": true,
+    "evolution_mode": "recursive"
+  }
+}
