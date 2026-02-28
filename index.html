@@ -4,48 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Epic Tech AI | Sovereign Command Nexus vΩ.∞</title>
-    <!-- 
-      Axiomatic Substrate: Next-Gen WebGL + GSAP + Tailwind 
-      Enforced by: CodeSynth Engineers & DesignCore Elite [6, 14]
-    -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --omega-cyan: #00f2ff;
-            --spectral-magenta: #ff00c1;
-            --sovereign-gold: #ffb300;
-            --void-black: #050505;
-        }
-        body {
-            margin: 0;
-            background-color: var(--void-black);
-            color: white;
-            font-family: 'Space Grotesk', sans-serif;
-            overflow: hidden;
-        }
+        :root { --omega-cyan: #00f2ff; --spectral-magenta: #ff00c1; --sovereign-gold: #ffb300; --void-black: #050505; }
+        body { margin: 0; background-color: var(--void-black); color: white; font-family: 'Space Grotesk', sans-serif; overflow: hidden; }
         .mythic-font { font-family: 'Syncopate', sans-serif; }
-        .glass-panel {
-            background: rgba(5, 5, 5, 0.75);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-        }
+        .glass-panel { background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(0, 242, 255, 0.2); }
         .glow-text { text-shadow: 0 0 15px var(--omega-cyan); }
         #canvas-container { position: fixed; top: 0; left: 0; z-index: 1; }
         .ui-overlay { position: relative; z-index: 10; pointer-events: none; }
         .interactive { pointer-events: auto; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--omega-cyan); border-radius: 10px; }
+        .terminal-scroll::-webkit-scrollbar { width: 4px; }
+        .terminal-scroll::-webkit-scrollbar-thumb { background: var(--omega-cyan); border-radius: 10px; }
     </style>
 </head>
 <body class="h-screen w-screen">
 
     <div id="canvas-container"></div>
 
-    <!-- UI Overlay: The Regulated Communication Interface [15, 16] -->
     <div class="ui-overlay h-full flex flex-col p-6 lg:p-12">
         <header class="flex justify-between items-start mb-8">
             <div>
@@ -53,144 +32,134 @@
                 <p class="text-[var(--sovereign-gold)] tracking-[0.3em] text-xs uppercase mt-2">Sovereign Command Nexus vΩ.∞</p>
             </div>
             <div class="glass-panel p-4 rounded-lg text-right hidden lg:block">
-                <p class="text-[var(--omega-cyan)] text-[10px] uppercase opacity-60">Status: Manifesting</p>
                 <p id="clock" class="text-white text-xl font-mono">00:00:00</p>
+                <p class="text-[var(--omega-cyan)] text-[10px] uppercase opacity-60">Status: Fully Manifested</p>
             </div>
         </header>
 
         <div class="flex-grow flex flex-col lg:flex-row gap-6 overflow-hidden">
-            <!-- Terminal Feed: Strategic Synthesis [2, 17, 18] -->
             <div class="glass-panel rounded-xl flex-grow p-6 flex flex-col">
-                <div id="terminal" class="flex-grow overflow-y-auto space-y-4 font-mono text-sm mb-4 pr-2">
-                    <p class="text-[var(--sovereign-gold)] font-bold">>>> AGENT ARMY INITIALIZED.</p>
-                    <p class="text-[var(--omega-cyan)] opacity-80">> CodeSynth Engineers: Scene Manifested.</p>
-                    <p class="text-[var(--omega-cyan)] opacity-80">> KeyMaster Ops: Credential Vault Secure.</p>
-                    <p class="text-white opacity-60 italic">> Awaiting Ontological Command...</p>
+                <div id="terminal" class="terminal-scroll flex-grow overflow-y-auto space-y-4 font-mono text-sm mb-4 pr-2">
+                    <p class="text-[var(--sovereign-gold)] font-bold">>>> AGENT ARMY HIVE-MIND ONLINE.</p>
+                    <p class="text-[var(--omega-cyan)] opacity-80">> Direct Ontological Interface: Connected.</p>
+                    <p class="text-white opacity-60 italic">> Enter command to manifest reality...</p>
                 </div>
                 
                 <div class="interactive flex gap-4">
-                    <input type="text" id="command-input" placeholder="Issue Command..." 
+                    <input type="text" id="command-input" placeholder="Issue Ontological Command..." 
                         class="flex-grow bg-transparent border-b-2 border-[var(--omega-cyan)] p-4 text-white outline-none focus:border-[var(--spectral-magenta)] transition-all">
-                    <button onclick="executeCommand()" class="bg-[var(--sovereign-gold)] text-black font-black px-8 py-4 mythic-font hover:scale-105 transition-transform active:scale-95">
+                    <button id="manifest-btn" class="bg-[var(--sovereign-gold)] text-black font-black px-8 py-4 mythic-font hover:scale-105 transition-transform">
                         MANIFEST
                     </button>
                 </div>
             </div>
 
-            <!-- Side HUD: Visual Law [6, 12, 19] -->
             <div class="w-full lg:w-80 flex flex-col gap-6">
                 <div class="glass-panel rounded-xl p-6">
-                    <h3 class="mythic-font text-[10px] text-[var(--sovereign-gold)] mb-4 uppercase tracking-widest">Neural Load</h3>
+                    <h3 class="mythic-font text-[10px] text-[var(--sovereign-gold)] mb-4 tracking-widest uppercase">Neural Pulse</h3>
                     <div class="w-full bg-gray-800 h-1 rounded-full overflow-hidden">
-                        <div id="neural-bar" class="bg-[var(--omega-cyan)] h-full w-[42%] transition-all duration-1000"></div>
+                        <div id="neural-bar" class="bg-[var(--omega-cyan)] h-full w-[10%] transition-all duration-500"></div>
                     </div>
                 </div>
                 <div class="glass-panel rounded-xl p-6 flex-grow">
-                    <h3 class="mythic-font text-[10px] text-[var(--omega-cyan)] mb-4 uppercase tracking-widest">Active Divisions</h3>
-                    <ul class="text-[10px] space-y-3 uppercase tracking-tighter opacity-80">
-                        <li class="flex justify-between"><span>Visionary Corps</span><span class="text-[var(--omega-cyan)]">Live</span></li>
-                        <li class="flex justify-between"><span>VoiceMaster</span><span class="text-[var(--omega-cyan)]">Live</span></li>
-                        <li class="flex justify-between"><span>SoundForge</span><span class="text-[var(--omega-cyan)]">Live</span></li>
-                        <li class="flex justify-between"><span>CodeSynth</span><span class="text-[var(--omega-cyan)]">Live</span></li>
-                    </ul>
+                    <h3 class="mythic-font text-[10px] text-[var(--omega-cyan)] mb-4 tracking-widest uppercase">Division Logs</h3>
+                    <div id="logs" class="text-[9px] space-y-2 uppercase opacity-60 font-mono">
+                        <p>> [CodeSynth] Environment ready.</p>
+                        <p>> [KeyMaster] Tokens injected.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- 1. THE BRAIN: EPIC TECH AGENT COMMANDS [20, 21] ---
-        function executeCommand() {
-            const input = document.getElementById('command-input');
-            const terminal = document.getElementById('terminal');
-            if (!input.value) return;
+        // --- THE NEURAL ENGINE: BRIDGE LOGIC ---
+        const terminal = document.getElementById('terminal');
+        const input = document.getElementById('command-input');
+        const btn = document.getElementById('manifest-btn');
+        const neuralBar = document.getElementById('neural-bar');
 
+        async function executeCommand() {
             const cmd = input.value;
-            const p = document.createElement('p');
-            p.className = 'text-[var(--spectral-magenta)] font-bold mt-4';
-            p.innerHTML = `> EXECUTING: ${cmd}`;
-            terminal.appendChild(p);
-
-            const res = document.createElement('p');
-            res.className = 'text-white opacity-80 ml-4';
-            res.innerHTML = `>> Manifesting vision... Agent Army Synchronized.`;
-            terminal.appendChild(res);
-
+            if (!cmd) return;
+            
             input.value = '';
+            neuralBar.style.width = '90%';
+            
+            // Log outgoing command
+            const pCmd = document.createElement('p');
+            pCmd.className = 'text-[var(--spectral-magenta)] font-bold';
+            pCmd.innerHTML = `> EXECUTING: ${cmd}`;
+            terminal.appendChild(pCmd);
             terminal.scrollTop = terminal.scrollHeight;
 
-            // Randomize HUD Load for visual flair
-            document.getElementById('neural-bar').style.width = Math.floor(Math.random() * 60 + 40) + '%';
+            try {
+                // AGENTIC GATEWAY: Fetching intelligence from our server.js bridge
+                const response = await fetch('/api/webmcp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command: cmd })
+                });
+
+                const data = await response.json();
+                
+                // MANIFESTATION: Rendering the Agent Army's output
+                const pRes = document.createElement('p');
+                pRes.className = 'text-white border-l-2 border-[var(--omega-cyan)] pl-4 py-2 my-2 bg-white/5';
+                pRes.innerText = data.result || data.error;
+                terminal.appendChild(pRes);
+
+            } catch (err) {
+                const pErr = document.createElement('p');
+                pErr.className = 'text-red-500 font-bold';
+                pErr.innerText = `> BRIDGE ERROR: Connection to Neural Core lost. Ensure server.js is running.`;
+                terminal.appendChild(pErr);
+            } finally {
+                neuralBar.style.width = '20%';
+                terminal.scrollTop = terminal.scrollHeight;
+            }
         }
 
-        // --- 2. THE BODY: 3D SOVEREIGN AURA [13, 22] ---
+        btn.onclick = executeCommand;
+        input.onkeypress = (e) => { if(e.key === 'Enter') executeCommand(); };
+
+        // --- THE SOVEREIGN AURA: 3D ENGINE ---
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // Sovereign Aura Geometry
-        const geometry = new THREE.IcosahedronGeometry(1.8, 1);
-        const material = new THREE.MeshPhongMaterial({
-            color: 0x00f2ff,
-            wireframe: true,
-            emissive: 0x00f2ff,
-            emissiveIntensity: 0.5,
-            transparent: true,
-            opacity: 0.3
-        });
-        const aura = new THREE.Mesh(geometry, material);
+        const aura = new THREE.Mesh(
+            new THREE.IcosahedronGeometry(2, 1),
+            new THREE.MeshPhongMaterial({ color: 0x00f2ff, wireframe: true, emissive: 0x00f2ff, emissiveIntensity: 0.5, transparent: true, opacity: 0.2 })
+        );
         scene.add(aura);
-
-        // Core Pulse
-        const coreGeo = new THREE.SphereGeometry(0.5, 32, 32);
-        const coreMat = new THREE.MeshPhongMaterial({ color: 0xffb300, emissive: 0xffb300, emissiveIntensity: 1 });
-        const core = new THREE.Mesh(coreGeo, coreMat);
+        
+        const core = new THREE.Mesh(
+            new THREE.SphereGeometry(0.4, 32, 32),
+            new THREE.MeshPhongMaterial({ color: 0xffb300, emissive: 0xffb300, emissiveIntensity: 1 })
+        );
         scene.add(core);
 
-        // Lighting System
-        const ambient = new THREE.AmbientLight(0x404040, 2);
-        const p1 = new THREE.PointLight(0x00f2ff, 2, 100);
-        const p2 = new THREE.PointLight(0xff00c1, 1, 100);
-        p1.position.set(5, 5, 5);
-        p2.position.set(-5, -5, 5);
-        scene.add(ambient, p1, p2);
+        const p1 = new THREE.PointLight(0x00f2ff, 2, 100); p1.position.set(5, 5, 5);
+        const p2 = new THREE.PointLight(0xff00c1, 1, 100); p2.position.set(-5, -5, 5);
+        scene.add(p1, p2, new THREE.AmbientLight(0x404040, 2));
+        camera.position.z = 6;
 
-        camera.position.z = 5;
-
-        // --- 3. THE HEARTBEAT: ANIMATION & TIME [23] ---
         function animate() {
             requestAnimationFrame(animate);
-            aura.rotation.y += 0.005;
-            aura.rotation.x += 0.002;
-            
-            // Subtle pulse
-            const time = Date.now() * 0.001;
-            core.scale.setScalar(1 + Math.sin(time * 2) * 0.1);
-            
+            aura.rotation.y += 0.003;
+            core.scale.setScalar(1 + Math.sin(Date.now()*0.002)*0.1);
             renderer.render(scene, camera);
         }
-
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString('en-GB');
-        }
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Initialize Systems
         animate();
-        setInterval(updateClock, 1000);
-        updateClock();
-        
-        // Introductory sequence
-        gsap.from(".glass-panel", { opacity: 0, y: 50, duration: 1.5, stagger: 0.2, ease: "power4.out" });
-        gsap.from(".mythic-font", { opacity: 0, scale: 0.9, duration: 2, ease: "expo.out" });
+
+        function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-GB'); }
+        setInterval(updateClock, 1000); updateClock();
+
+        window.onresize = () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); };
+        gsap.from(".glass-panel", { opacity: 0, y: 30, duration: 1.5, stagger: 0.2 });
     </script>
 </body>
 </html>
